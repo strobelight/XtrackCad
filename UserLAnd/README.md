@@ -38,7 +38,7 @@ If you have an ssh public key, you can place it on the device for easier access 
 cd
 id  # ensure userland user
 mkdir .ssh
-cat <<EOF > authorized_keys
+cat <<EOF > .ssh/authorized_keys
 <paste your ssh public key (should be a single line with at most 3 space-separated fields)>
 EOF
 ```
