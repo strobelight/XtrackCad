@@ -1,6 +1,7 @@
 #!/bin/bash
 sudo apt -y install mercurial
 sudo apt -y install tortoisehg
+sudo apt -y install python3-iniparse
 sudo apt -y install cmake cmake-curses-gui
 sudo apt -y install libzip4 libzip-dev
 sudo apt -y install libmxml-dev libmxml1
@@ -40,6 +41,8 @@ if [ -d $HOME/.local/share/applications ]; then
     cat <<-EOF > $HOME/.local/bin/startXtrkCad
 	#!/bin/bash
 	unset LD_LIBRARY_PATH
+	unset XTRKCADLIB
+	cd $XtrackInstallPrefix/bin
 	exec $XtrackInstallPrefix/bin/xtrkcad
 	EOF
     chmod +x $HOME/.local/bin/startXtrkCad
