@@ -71,7 +71,12 @@ As you tap on the device, you'll see an overlay with keyboard, buttons, ability 
 When done, press and hold the session to stop it. If the UserLAnd icon on the status bar does not disappear, you may have to force stop it.
 
 ## Import, Export, Saving, etc
+### From the apps point of view
 The `/storage/internal` and `/storage/sdcard` (if inserted) directories are available to import, export, save, load, files to/from the device to the app.
 
 _**Saving files with the app filesystem will be gone if the app is ever removed.**_
 
+### From the devices point of view
+The `/storage/internal` directory from within the app is on the device file system at `<your.device.name>/Android/data/tech.ula/files/storage`. The `/storage/sdcard` directory points to your sdcard if inserted. 
+
+_Not all filesystem utilities have access to the directories under `Android/data`; I had to use the `Files` app. (`Files from Google`, and `FX` I have didn't work)._
