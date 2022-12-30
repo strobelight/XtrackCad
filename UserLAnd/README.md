@@ -79,4 +79,4 @@ _**Saving files with the app filesystem will be gone if the app is ever removed.
 ### From the devices point of view
 The `/storage/internal` directory from within the app is on the device file system at `<your.device.name>/Android/data/tech.ula/files/storage`. The `/storage/sdcard` directory points to your sdcard if inserted. 
 
-_Not all filesystem utilities have access to the directories under `Android/data`; I had to use the `Files` app. (`Files from Google`, and `FX` I have didn't work)._
+_Not all filesystem utilities have access to the directories under `Android/data`; I had to use the `Files` or `File Manager+` app. (`Files from Google`, and `FX` I also have didn't work)._
