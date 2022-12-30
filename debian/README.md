@@ -15,3 +15,8 @@ Install the UserLAnd app with Lxde as documented in the UserLAnd directory of th
 
 ## Run
 At the bottom left corner is the menu for apps to run. If the steps above are successful, you should find the XtrackCad app in the Graphics submenu.
+
+## Saving plans
+Unfortunately I dont have an sdcard to try, but it seems to me to be far easier to use an sdcard. Just insert the card, and export/save your track plans to `/storage/sdcard`.
+
+Sure `storage/internal` is available, but seems harder to get to for access from another computer. Not all file management apps have access. One that does is `File Manager+` which asks for permissions to directories that an app normally shouldn't have access to.
