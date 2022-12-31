@@ -41,7 +41,7 @@ if [ -d $HOME/.local/share/applications ]; then
     cat <<-EOF > $HOME/.local/bin/startXtrkCad
 	#!/bin/bash
 	unset LD_LIBRARY_PATH
-	unset XTRKCADLIB
+	export XTRKCADLIB=$XtrackInstallPrefix/share/xtrkcad
 	cd $XtrackInstallPrefix/bin
 	exec $XtrackInstallPrefix/bin/xtrkcad
 	EOF
