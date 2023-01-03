@@ -57,6 +57,14 @@ mkdir -p $XtrackBuildDir || exit
 
 if [[ -d $XtrackSrc ]]; then
     cd $XtrackSrc
+    if ! hg incoming -q; then
+        echo "No remote changes"
+        read -p "Build anyway (y/n)? " -N 1 -t 2 YN
+        echo
+        if [ "$YN" != "y" ]; then
+            exit
+        fi
+    fi
     hg pull http://hg.code.sf.net/p/xtrkcad-fork/xtrkcad
 else
     mkdir -p $XtrackSrc || exit
