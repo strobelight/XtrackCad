@@ -52,8 +52,6 @@ cmake --version
 sleep 2
 
 cd $HOME
-rm -rf $XtrackPath || exit
-mkdir -p $XtrackBuildDir || exit
 
 if [[ -d $XtrackSrc ]]; then
     cd $XtrackSrc
@@ -71,6 +69,8 @@ else
     hg clone http://hg.code.sf.net/p/xtrkcad-fork/xtrkcad $XtrackSrc
     cd $XtrackSrc
 fi
+rm -rf $XtrackPath || exit
+mkdir -p $XtrackBuildDir || exit
 echo "Update for version $XtrackVer"
 sleep 2
 hg update $XtrackVer
