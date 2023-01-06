@@ -81,6 +81,10 @@ cd $XtrackBuildDir || exit
 
 cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=$XtrackInstallPrefix -DCMAKE_C_FLAGS=-Wpointer-sign -DXTRKCAD_USE_GETTEXT=ON $XtrackSrc
 
+# reduce inkscape output
+mkdir -p ~/.config/inkscape/fonts
+sudo mkdir -p /usr/share/inkscape/fonts
+
 make || exit
 make install || exit
 
