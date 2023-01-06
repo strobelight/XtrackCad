@@ -55,7 +55,7 @@ cd $HOME
 
 if [[ -d $XtrackSrc ]]; then
     cd $XtrackSrc
-    if ! hg incoming -q; then
+    if ! hg incoming -b $XtrackVer -q --pager never; then
         echo "No remote changes"
         read -p "Build anyway (y/n)? " -N 1 -t 2 YN
         echo
