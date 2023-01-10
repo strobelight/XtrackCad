@@ -6,24 +6,37 @@ if [ "$1" = "-h" -o "$1" = "--help" ]; then
 fi
 
 JUST_BUILD=${2:-no}
+NO_UPDATE=${3:-no}
 
 #XtrackVer="V5.2.2"
 XtrackVer="V5.2.2a"
 #XtrackVer="default"
 
-XtrackVer=${1:-$XtrackVer}
+XtrackVer="${1:-$XtrackVer}"
 
-XtrackPath="$HOME/XtrackCAD/$XtrackVer"
+NoBlankVer=$(echo "$XtrackVer" | tr -d -c -- '-_[:alnum:]')
+
+XtrackPath="$HOME/XtrackCAD/$NoBlankVer"
 XtrackSrc="$HOME/XtrackCAD/src"
 XtrackBuildDir="$XtrackPath/build-dbg"
 XtrackInstallPrefix="$XtrackPath/install-dbg"
 
 function usage() {
-    cat <<EOF
-    $(basename $BASH_SOURCE) [ version ] [ skip-dependent-installs ]
-    version defaults to $XtrackVer
-    skip-dependent-install defaults to "$JUST_BUILD", enter "yes" to skip
-EOF
+    cat <<-EOF
+	$(basename $BASH_SOURCE) [ version ] [ skip-dependent-installs ] [ no-update ]
+	version defaults to "$XtrackVer"
+	skip-dependent-install defaults to "$JUST_BUILD", enter "yes" to skip
+	no-update defaults to "$NO_UPDATE", enter "yes" to leave current src tree alone
+
+	add quotes around version if it contains blanks
+
+	EOF
+    if [[ -d $XtrackSrc ]]; then
+        echo "Recent versions:"
+        echo
+        cd $XtrackSrc
+        hg tags --pager never | sed 's/tip    /default/' | head -10
+    fi
 }
 
 if [ "$RUN_USAGE" = "yes" ]; then
@@ -55,7 +68,7 @@ cd $HOME
 
 if [[ -d $XtrackSrc ]]; then
     cd $XtrackSrc
-    if ! hg incoming -b $XtrackVer -q --pager never; then
+    if ! hg incoming -b "$XtrackVer" -q --pager never; then
         echo "No remote changes"
         read -p "Build anyway (y/n)? " -N 1 -t 2 YN
         echo
@@ -63,7 +76,9 @@ if [[ -d $XtrackSrc ]]; then
             exit
         fi
     fi
-    hg pull http://hg.code.sf.net/p/xtrkcad-fork/xtrkcad
+    if [ $NO_UPDATE != "yes" ]; then
+        hg pull http://hg.code.sf.net/p/xtrkcad-fork/xtrkcad
+    fi
 else
     mkdir -p $XtrackSrc || exit
     hg clone http://hg.code.sf.net/p/xtrkcad-fork/xtrkcad $XtrackSrc
@@ -71,9 +86,11 @@ else
 fi
 rm -rf $XtrackPath || exit
 mkdir -p $XtrackBuildDir || exit
-echo "Update for version $XtrackVer"
-sleep 2
-hg update $XtrackVer
+if [ $NO_UPDATE != "yes" ]; then
+    echo "Update for version $XtrackVer"
+    sleep 2
+    hg update "$XtrackVer"
+fi
 cd $XtrackBuildDir || exit
 
 # defining location of cmocka library resulted in compile errors of unit tests
@@ -97,29 +114,29 @@ fi
 if [ -d $HOME/.local/share/applications ]; then
     mkdir -p $HOME/.local/bin
     cd $HOME/.local/bin
-    cat <<-EOF > startXtrkCad_$XtrackVer
+    cat <<-EOF > startXtrkCad_$NoBlankVer
 	#!/bin/bash
 	unset LD_LIBRARY_PATH
 	unset XTRKCADLIB
 	EOF
-    if [ "$XtrackVer" = "V5.2.2" -o "$XtrackVer" = "V5.2.2a" -o -n "$BETA" ]; then
-    cat <<-EOF >> startXtrkCad_$XtrackVer
+    if [ "$NoBlankVer" = "V5.2.2" -o "$NoBlankVer" = "V5.2.2a" -o -n "$BETA" ]; then
+    cat <<-EOF >> startXtrkCad_$NoBlankVer
 	# comment out if help works relative to current directory
 	export XTRKCADLIB=$XtrackInstallPrefix/share/xtrkcad${BETA}
 	EOF
     fi
-    cat <<-EOF >> startXtrkCad_$XtrackVer
+    cat <<-EOF >> startXtrkCad_$NoBlankVer
 	cd $XtrackInstallPrefix/bin
 	exec $XtrackInstallPrefix/bin/xtrkcad${BETA}
 	EOF
-    chmod +x startXtrkCad_$XtrackVer
+    chmod +x startXtrkCad_$NoBlankVer
     rm -f startXtrkCad
-    ln -s startXtrkCad_$XtrackVer startXtrkCad
-    cat <<-EOF > $HOME/.local/share/applications/xtrkcad_${XtrackVer}.desktop
+    ln -s startXtrkCad_$NoBlankVer startXtrkCad
+    cat <<-EOF > $HOME/.local/share/applications/xtrkcad_${NoBlankVer}.desktop
 	[Desktop Entry]
-	Name=XTrackCAD_${XtrackVer}
+	Name=XTrackCAD_${NoBlankVer}
 	Comment=Design model railroad layouts
-	Exec=$HOME/.local/bin/startXtrkCad_${XtrackVer}
+	Exec=$HOME/.local/bin/startXtrkCad_${NoBlankVer}
 	Icon=$XtrackInstallPrefix/share/xtrkcad${BETA}/logo.bmp
 	Path=$XtrackInstallPrefix/bin
 	Terminal=false
