@@ -44,9 +44,9 @@ contents.html \
 `extract view_winm.but` \
 `extract navigation.but` \
 `extract appendix.but` \
+`extract ${HELP_DIR}/messages.but` \
 `extract upgrade.but` \
 `extract warranty.but` \
-`extract ${HELP_DIR}/messages.but` \
 IndexPage.html"
 
 cd "$WORKING_DIR" || exit
